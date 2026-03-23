@@ -1,0 +1,160 @@
+dataloader_args:
+  batch_size: 2
+  drop_last: true
+  num_workers: 6
+  pin_memory: false
+  prefetch_factor: 6
+
+dataset_args:
+  resample_rate: &sr 16000
+  sample_num_per_epoch: 0
+  shuffle: true
+  shuffle_args:
+    shuffle_size: 2500
+  filter_len: true
+  filter_len_args:
+      min_num_seconds: 1.0
+      max_num_seconds: 100.0
+  chunk_len: 48000
+  online_mix: true
+  num_speakers:
+    distribution: [0.1, 0.7, 0.2] # 3rd means 3+
+    max_speakers: 4
+  # timeline: --- IGNORE --- Not stable
+  #   two_speaker:
+  #     overlap_ratio: [0.5, 1.0]
+  #     overlap_position:
+  #       head: 0.3
+  #       middle: 0.4
+  #       tail: 0.3
+  #     middle_mode:
+  #       crossing: 0.6
+  #       containment: 0.4
+  #   extra_speaker_activity: [0.1, 0.8]
+  #   silence:
+  #     allow: False  # Add silence seg to the head/tail
+  #     head_tail_ratio: [0.0, 0.1]
+  mix_snr:
+    range: [-5, 10] # signal-to-interference ratio in dB
+    gain: [-12, 0]
+  noise_prob: 0
+  noise_lmdb_file:  './data/musan/lmdb'
+  reverb_prob: 0
+  reverb_conf:
+    min_max_room: [[3, 3, 2.5], [8, 6, 4]]
+    rt60: [0.1, 0.6]
+    mic_dist: [0.2, 4.0]
+  cues:
+    audio:
+      use: true
+      required: true
+  cue_processing:
+    audio:
+      reverb_enroll_prob: 0
+      noise_enroll_prob: 0
+
+enable_amp: false
+exp_dir: exp/BSRNN
+gpus: '0,1'
+log_batch_interval: 100
+
+loss: SISDR
+loss_args: { }
+
+model:
+  tse_model: TSE_BSRNN_SPK
+model_args:
+  tse_model:
+    separator:
+      sr: *sr
+      win: 512
+      stride: 128
+      feature_dim: 128
+      num_repeat: 6
+      causal: False
+      nspk: 1
+    speaker:
+      features:
+        listen:
+          enabled: False
+          glue: 512
+        usef:
+          enabled: True
+          spec_dim: 2
+          approx_qk_dim: 512
+          n_head: 4
+          t_ksize: 3
+        tfmap:
+          enabled: False
+          type: "spec"   # 'spec'
+        context:
+          enabled: True
+          speaker_model:
+          embed_dim: 512     # Need check the speaker encoder in wespeaker
+          atten_dim: 128         # dim in cross-attention
+          num_heads: 2
+          fusion": "multiply"    # add | concat | multiply
+        spkemb:
+          enabled: False
+          speaker_model:
+          fusion: "multiply" # add | concat | multiply
+      speaker_model:
+        fbank:
+          num_mel_bins: 80
+          frame_shift: 10
+          frame_length: 25
+          dither: 1.0
+          sample_rate: *sr       # sampling rate
+        # ---- Speaker Encoder
+        speaker_encoder:
+          model: ECAPA_TDNN_GLOB_c512
+          pretrained: ./wespeaker_models/voxceleb_ECAPA512/avg_model.pt
+          spk_args:
+            embed_dim: 192         # speaker embedding
+            feat_dim: 80         # num_mel_bins
+            pooling_func: "ASTP"
+          ####### ResNet    The pretrained speaker encoders are available from: https://github.com/wenet-e2e/wespeaker/blob/master/docs/pretrained.md
+          # spk_model: ResNet34 # ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+          # spk_model_init: False #./wespeaker_models/voxceleb_resnet34/avg_model.pt
+          # spk_args:
+          #   feat_dim: 80
+          #   embed_dim: &embed_dim 256
+          #   pooling_func: "TSTP" # TSTP, ASTP, MQMHASTP
+          #   two_emb_layer: False
+          ####### CAMPPlus
+          # spk_model: CAMPPlus
+          # spk_model_init: False
+          # spk_args:
+          #   feat_dim: 80
+          #   embed_dim: &embed_dim 192
+          #   pooling_func: "TSTP" # TSTP, ASTP, MQMHASTP
+          #################################################################
+
+# find_unused_parameters: True
+
+model_init:
+  tse_model: null
+  discriminator: null
+num_avg: 10
+num_epochs: 150
+
+optimizer:
+  tse_model: Adam
+optimizer_args:
+  tse_model:
+    lr: 0.001
+    weight_decay: 0.0001
+
+clip_grad: 5.0
+save_epoch_interval: 1
+
+scheduler:
+  tse_model: ExponentialDecrease
+scheduler_args:
+  tse_model:
+    final_lr: 2.5e-05
+    initial_lr: 0.001
+    warm_from_zero: false
+    warm_up_epoch: 0
+
+seed: 42

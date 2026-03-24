@@ -1,7 +1,17 @@
 # Wesep
 
-> We aim to build a toolkit focusing on front-end processing in the cocktail party set up, including target speaker extraction and ~~speech separation (Future work)~~
+## Overview
 
+> Target speaker extraction (TSE) focuses on isolating the speech of a specific target speaker from overlapped multi-talker speech, which is a typical setup in the cocktail party problem.
+WeSep is featured with flexible target speaker modeling, scalable data management, effective on-the-fly data simulation, structured recipes and deployment support.
+
+This version of **Wesep** is a **lightweight and competition-oriented release**. It is designed to:
+
+- Provide a **reproducible training template**
+- Support **official baseline system usage**
+- Serve as a **reference implementation** for participants
+
+<img src="resources/tse.png" width="600px">
 
 ### Install for development & deployment
 * Clone this repo
@@ -23,41 +33,25 @@ pip install -r requirements.txt
 pre-commit install  # for clean and tidy code
 ```
 
-## The Target Speaker Extraction Task
+## Supported Features
 
-> Target speaker extraction (TSE) focuses on isolating the speech of a specific target speaker from overlapped multi-talker speech, which is a typical setup in the cocktail party problem.
-WeSep is featured with flexible target speaker modeling, scalable data management, effective on-the-fly data simulation, structured recipes and deployment support.
+### Model
+- **BSRNN-based separator**
+  - Causal
+  - Non-causal
 
-<img src="resources/tse.png" width="600px">
+### Speaker Feature Representation Support
 
-## Features (To Do List)
+This version supports multiple types of **audio-based target speaker cues**:
 
-- [x] On the fly data simulation
-  - [x] Dynamic Mixture simulation
-  - [x] Dynamic Reverb simulation
-  - [x] Dynamic Noise simulation
-- [x] Support time- and frequency- domain models
-    - Time-domain
-        - [x] conv-tasnet based models
-            - [x] Spex+
-    - Frequency domain
-        - [x] pBSRNN
-        - [x] pDPCCN
-        - [x] tf-gridnet (Extremely slow, need double check)
-- [ ] Training Criteria
-    - [x] SISNR loss
-    - [x] GAN loss  (Need further investigation)
-- [ ] Datasets
-  - [x] Libri2Mix (Illustration for pre-mixed speech)
-  - [x] VoxCeleb (Illustration for online training)
-  - [ ] WSJ0-2Mix
-- [ ] Speaker Embedding
-  - [x] Wespeaker Intergration
-  - [x] Joint Learned Speaker Embedding
-  - [x] Different fusion methods
-- [ ] Pretrained models
-- [ ] CLI Usage
-- [x] Runtime
+- Speaker Embedding (via **WeSpeaker**)
+- USEF Feature
+- TF-Map Feature
+- Contextual Embedding
+
+## Pretrained Models
+
+Will release soon.
 
 ## Data Pipe Design
 

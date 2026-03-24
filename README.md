@@ -49,6 +49,10 @@ This version supports multiple types of **audio-based target speaker cues**:
 - TF-Map Feature
 - Contextual Embedding
 
+### Datasets for training (Examples)
+- Libri2mix
+- Voxceleb1 (Online mixing)
+
 ## Pretrained Models
 
 Will release soon.

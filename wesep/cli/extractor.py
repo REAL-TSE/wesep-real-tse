@@ -53,8 +53,6 @@ class Extractor:
 
         self.speaker_feat = configs["model_args"]["tse_model"].get(
             "spk_feat", False)
-        self.joint_training = configs["model_args"]["tse_model"].get(
-            "joint_training", False)
 
     def set_wavform_norm(self, wavform_norm: bool):
         self.wavform_norm = wavform_norm
@@ -141,29 +139,27 @@ class Extractor:
                 orig_freq=sample_rate_enroll,
                 new_freq=self.resample_rate)(pcm_enroll)
 
-        if self.joint_training:
-            if self.speaker_feat:
-                feats = self.compute_fbank(pcm_enroll,
-                                           sample_rate=self.resample_rate,
-                                           cmn=True)
-                feats = feats.unsqueeze(0)
-            else:
-                feats = pcm_enroll
-
-            feats = feats.to(self.device)
-            pcm_mix = pcm_mix.to(self.device)
-            with torch.no_grad():
-                outputs = self.model(pcm_mix, feats)
-                outputs = outputs[0] if isinstance(outputs,
-                                                   (list, tuple)) else outputs
-            target_speech = outputs.to(torch.device("cpu"))
-            if self.output_norm:
-                target_speech = (
-                    target_speech /
-                    abs(target_speech).max(dim=1, keepdim=True).values * 0.9)
-            return target_speech
+        if self.speaker_feat:
+            feats = self.compute_fbank(pcm_enroll,
+                                       sample_rate=self.resample_rate,
+                                       cmn=True)
+            feats = feats.unsqueeze(0)
         else:
-            return None
+            feats = pcm_enroll
+
+        feats = feats.to(self.device)
+        pcm_mix = pcm_mix.to(self.device)
+        with torch.no_grad():
+            outputs = self.model(pcm_mix, feats)
+            outputs = outputs[0] if isinstance(outputs,
+                                               (list, tuple)) else outputs
+            outputs = outputs.squeeze(0)  # remove the Batch dimension
+        target_speech = outputs.to(torch.device("cpu"))
+        if self.output_norm:
+            target_speech = (
+                target_speech /
+                abs(target_speech).max(dim=1, keepdim=True).values * 0.9)
+        return target_speech
 
 
 def load_model(language: str) -> Extractor:

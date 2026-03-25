@@ -85,8 +85,10 @@ class TSE_BSRNN_SPK(nn.Module):
                 each Tensor: [B, 1, T]
         """
 
+        if isinstance(enroll, (list, tuple)):
+            enroll = enroll[0]
         mix = mix.squeeze(1)
-        enroll = enroll[0].squeeze(1)
+        enroll = enroll.squeeze(1)
 
         # input shape: (B, T)
         mix_dims = mix.dim()

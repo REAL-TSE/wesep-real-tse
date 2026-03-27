@@ -67,6 +67,14 @@ REAL-T/
 │ ├── tfmap_context_100/
 │ └── tfmap_context_causal_100/
 ```
+To use a checkpoint for extracting a target speech from "mixture.wav" with "enroll.wav":
+``` sh
+python evaluate.py \
+  --pretrain path/to/model_folder \
+  --mixture path/to/mix.wav \
+  --enroll path/to/enroll.wav \
+  --output path/to/output.wav \
+```
 
 ## Data Pipe Design
 

@@ -27,11 +27,13 @@ def get_args():
         action="store_true",
         help="whether to use the bsrnn model",
     )
-    parser.add_argument("-p",
-                        "--pretrain",
-                        type=str,
-                        default="",
-                        help="model directory")
+    parser.add_argument(
+        "-p",
+        "--pretrain",
+        type=str,
+        default="",
+        help="Path to model directory, containing avg_model.pt and config.yaml"
+    )
     parser.add_argument(
         "--device",
         type=str,

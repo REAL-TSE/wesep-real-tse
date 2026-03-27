@@ -55,7 +55,18 @@ This version supports multiple types of **audio-based target speaker cues**:
 
 ## Pretrained Models
 
-Will release soon.
+The checkpoints is availibale at [Google Drive](https://drive.google.com/uc?export=download&id=1M4UqK2A2EeHmQ0pCevYqBgaYn3RvklgC) . The directory structure for the pretrained models in the REAL-T project is suggested to be:
+
+```
+REAL-T/
+├── pretrained/
+│ ├── spk_emb_100/
+│ │ ├── avg_model.pt
+│ │ └── config.yaml
+│ ├── spk_emb_causal_100/
+│ ├── tfmap_context_100/
+│ └── tfmap_context_causal_100/
+```
 
 ## Data Pipe Design
 
@@ -65,7 +76,7 @@ Following Wenet and Wespeaker, WeSep organizes the data processing modules as a 
 
 
 ## Citations
-If you find wespeaker useful, please cite it as
+If you find wesep useful, please cite it as
 
 ```bibtex
 @inproceedings{wang24fa_interspeech,

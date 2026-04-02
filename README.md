@@ -24,12 +24,15 @@ https://github.com/wenet-e2e/wesep.git
 conda create -n wesep python=3.10
 conda activate wesep
 
-# Recommended (modern PyTorch)
-pip install torch>=2.6 torchaudio>=2.6
+# Recommended (aligned with evaluation toolkit)
+pip install torch==2.7.1 torchaudio==2.7.1
 # Alternative (legacy GPUs, e.g. V100)
 conda install pytorch=1.12.1 torchaudio=0.12.1 cudatoolkit=11.3 -c pytorch -c conda-forge
 
 pip install -r requirements.txt
+# speaker modeling support
+pip install git+https://github.com/wenet-e2e/wespeaker.git@8f53b6485d9f88a207bd17e7f8dba899495ec794
+
 pre-commit install  # for clean and tidy code
 ```
 

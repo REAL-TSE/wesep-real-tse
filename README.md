@@ -16,7 +16,7 @@ This version of **Wesep** is a **lightweight and competition-oriented release**.
 ### Install for development & deployment
 * Clone this repo
 ``` sh
-https://github.com/wenet-e2e/wesep.git
+git clone https://github.com/REAL-TSE/wesep-real-tse.git
 ```
 
 * Wesep is under active development and aims to support multi-cue inputs (speaker, visual, spatial, and semantic) as well as multiple modeling paradigms (discriminative, generative, and autoregressive).

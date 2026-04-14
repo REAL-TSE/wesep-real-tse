@@ -14,7 +14,6 @@ This repository is **NOT required** to participate in the challenge.
   - a **reference implementation**
   - a **quick starting point**
 
----
 ## What is this repo for?
 WeSep is designed to help you:
 - ✅ Run the **official baseline model**
@@ -22,7 +21,6 @@ WeSep is designed to help you:
 - ✅ Train your own model (optional)
 - ✅ Explore different **target speaker representations**
 
----
 ## Relation to the Challenge
 👉 This repository **does NOT include**:
 - Official dataset  
@@ -48,7 +46,9 @@ conda activate wesep
 
 # Recommended (aligned with evaluation toolkit)
 pip install torch==2.7.1 torchaudio==2.7.1
-# Alternative (if your GPU doesn't support PyTorch 2.x)
+# Note: This command may install the **CPU version** of PyTorch by default.
+# If you are using a GPU, please install the CUDA-enabled version manually.
+# Alternative: (if your GPU doesn't support PyTorch 2.x)
 # conda install pytorch=1.12.1 torchaudio=0.12.1 cudatoolkit=11.3 -c 
 
 pip install -r requirements.txt
@@ -84,19 +84,15 @@ python evaluate.py \
 ```
 ---
 
-## Supported Features
-
-### Model
+## Supported Models
 - **BSRNN-based separator**
   - Causal
   - Non-causal
-
-This version supports multiple types of **audio-based target speaker cues**:
-
-- Speaker Embedding (via **WeSpeaker**)
-- USEF Feature
-- TF-Map Feature
-- Contextual Embedding
+- **Audio-based target speaker features**:
+  - Speaker Embedding (via **WeSpeaker**)
+  - USEF Feature
+  - TF-Map Feature
+  - Contextual Embedding
 
 ## Training (Optional)
 

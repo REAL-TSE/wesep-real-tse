@@ -1,64 +1,65 @@
-# Wesep
+# WeSep (REAL-TSE Challenge Baseline Toolkit)
 
 ## Overview
 
-> Target speaker extraction (TSE) focuses on isolating the speech of a specific target speaker from overlapped multi-talker speech, which is a typical setup in the cocktail party problem.
-WeSep is featured with flexible target speaker modeling, scalable data management, effective on-the-fly data simulation, structured recipes and deployment support.
+> **WeSep** is a lightweight baseline toolkit for the **Real-TSE Challenge**, designed for **target speaker extraction (TSE)**.
 
-This version of **Wesep** is a **lightweight and competition-oriented release**. It is designed to:
+Target speaker extraction aims to isolate a specific speaker’s voice from overlapped multi-speaker audio — a classic *cocktail party problem*.
 
-- Provide a **reproducible training template**
-- Support **official baseline system usage**
-- Serve as a **reference implementation** for participants
+⚠️ **Important**  
+This repository is **NOT required** to participate in the challenge.
+- You are free to use **any model, framework, or training pipeline**
+- WeSep is provided as:
+  - a **baseline system**
+  - a **reference implementation**
+  - a **quick starting point**
 
-<img src="resources/tse.png" width="600px">
+---
+## What is this repo for?
+WeSep is designed to help you:
+- ✅ Run the **official baseline model**
+- ✅ Quickly test TSE on your own data
+- ✅ Train your own model (optional)
+- ✅ Explore different **target speaker representations**
 
-### Install for development & deployment
-* Clone this repo
-``` sh
+---
+## Relation to the Challenge
+👉 This repository **does NOT include**:
+- Official dataset  
+- Evaluation toolkit  
+- Submission pipeline  
+
+Please refer to the **challenge website** and **main challenge repository** for:
+- Data access  
+- Evaluation protocol  
+- Submission instructions  
+---
+
+## Quick Start (3 steps)
+
+### 1. Clone & install
+
+```bash
 git clone https://github.com/REAL-TSE/wesep-real-tse.git
-```
+cd wesep-real-tse
 
-* Wesep is under active development and aims to support multi-cue inputs (speaker, visual, spatial, and semantic) as well as multiple modeling paradigms (discriminative, generative, and autoregressive).
-``` sh
 conda create -n wesep python=3.10
 conda activate wesep
 
 # Recommended (aligned with evaluation toolkit)
 pip install torch==2.7.1 torchaudio==2.7.1
-# Alternative (legacy GPUs, e.g. V100)
-conda install pytorch=1.12.1 torchaudio=0.12.1 cudatoolkit=11.3 -c pytorch -c conda-forge
+# Alternative (if your GPU doesn't support PyTorch 2.x)
+# conda install pytorch=1.12.1 torchaudio=0.12.1 cudatoolkit=11.3 -c 
 
 pip install -r requirements.txt
-# speaker modeling support
-pip install git+https://github.com/wenet-e2e/wespeaker.git@8f53b6485d9f88a207bd17e7f8dba899495ec794
 
-pre-commit install  # for clean and tidy code
+# speaker embedding support
+pip install git+https://github.com/wenet-e2e/wespeaker.git@8f53b6485d9f88a207bd17e7f8dba899495ec794
 ```
 
-## Supported Features
+### 2. Download pretrained model
 
-### Model
-- **BSRNN-based separator**
-  - Causal
-  - Non-causal
-
-### Speaker Feature Representation Support
-
-This version supports multiple types of **audio-based target speaker cues**:
-
-- Speaker Embedding (via **WeSpeaker**)
-- USEF Feature
-- TF-Map Feature
-- Contextual Embedding
-
-### Datasets for training (Examples)
-- Libri2mix
-- Voxceleb1 (Online mixing)
-
-## Pretrained Models
-
-The checkpoints is availibale at [Google Drive](https://drive.google.com/uc?export=download&id=1M4UqK2A2EeHmQ0pCevYqBgaYn3RvklgC) . The directory structure for the pretrained models in the REAL-T project is suggested to be:
+The checkpoints are available at [Google Drive](https://drive.google.com/uc?export=download&id=1M4UqK2A2EeHmQ0pCevYqBgaYn3RvklgC) . The directory structure for the pretrained models in the REAL-T project is suggested to be:
 
 ```
 REAL-T/
@@ -70,7 +71,10 @@ REAL-T/
 │ ├── tfmap_context_100/
 │ └── tfmap_context_causal_100/
 ```
+
+### 3. Run inference
 To use a checkpoint for extracting a target speech from "mixture.wav" with "enroll.wav":
+
 ``` sh
 python evaluate.py \
   --pretrain path/to/model_folder \
@@ -78,16 +82,50 @@ python evaluate.py \
   --enroll path/to/enroll.wav \
   --output path/to/output.wav \
 ```
+---
 
-## Data Pipe Design
+## Supported Features
 
-Following Wenet and Wespeaker, WeSep organizes the data processing modules as a pipeline of a set of different processors. The following figure shows such a pipeline with essential processors.
+### Model
+- **BSRNN-based separator**
+  - Causal
+  - Non-causal
+
+This version supports multiple types of **audio-based target speaker cues**:
+
+- Speaker Embedding (via **WeSpeaker**)
+- USEF Feature
+- TF-Map Feature
+- Contextual Embedding
+
+## Training (Optional)
+
+WeSep also provides a **training template**, but:
+
+- Training is **NOT required** for the challenge
+- You can use any training pipeline you prefer
+
+Training recipes (WIP) are provided [here](https://github.com/REAL-TSE/wesep-real-tse/tree/main/examples/audio) .
+
+Currently includes:
+
+- Libri2Mix-based training pipeline
+- VoxCeleb-based online mixing pipeline
+
+If you are new, we recommend starting with **Libri2Mix**.
+
+Note:
+These examples are under active development (WIP) and may be updated.
+
+## Data Pipeline (Advanced)
+
+WeSep adopts a modular data processing pipeline design (inspired by Wenet and WeSpeaker), enabling flexible data simulation and feature construction.
 
 <img src="resources/datapipe.png" width="800px">
 
 
 ## Citations
-If you find wesep useful, please cite it as
+If you find WeSep useful, please cite it as
 
 ```bibtex
 @inproceedings{wang24fa_interspeech,

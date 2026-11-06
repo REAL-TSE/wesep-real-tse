@@ -2,7 +2,8 @@
 
 ## Overview
 
-> **WeSep** is a lightweight baseline toolkit for the **Real-TSE Challenge**, designed for **target speaker extraction (TSE)**.
+> **WeSep** is a lightweight baseline toolkit for the **Real-TSE Challenge**, designed for **target speaker extraction (TSE)**.  
+> For a broader range of target speaker extraction models and recipes, including audio, visual, and spatial approaches, check out [WeSep](https://github.com/wenet-e2e/wesep).
 
 Target speaker extraction aims to isolate a specific speaker’s voice from overlapped multi-speaker audio — a classic *cocktail party problem*.
 
@@ -71,6 +72,8 @@ REAL-T/
 │ ├── tfmap_context_100/
 │ └── tfmap_context_causal_100/
 ```
+
+For all four checkpoints provided through the Google Drive link above, the inference code authored by Dr. Ke Zhang and the model parameters trained by him are released under [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0), permitting commercial use, modification, format conversion, and redistribution under its terms without separate permission. Third-party pretrained parameters, including the WeSpeaker ECAPA-TDNN weights and any retained or fine-tuned versions, remain subject to their applicable upstream licenses. Acknowledgment of [REAL-TSE/wesep-real-tse](https://github.com/REAL-TSE/wesep-real-tse) is appreciated but is not an additional license requirement.
 
 ### 3. Run inference
 To use a checkpoint for extracting a target speech from "mixture.wav" with "enroll.wav":
